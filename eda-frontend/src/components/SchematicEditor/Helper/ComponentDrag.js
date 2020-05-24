@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-inner-declarations */
 /* eslint-disable no-new */
 /* eslint-disable new-cap */
@@ -85,12 +86,12 @@ export default function LoadGrid (container, sidebar, outline) {
     ClipBoardFunct(graph)
     NetlistInfoFunct(graph)
     ToolbarTools(graph)
-    for (var i = 0; i < paths.length; i++) {
-      AddSidebarComponent(paths[i]) // Adds the component to the sidebar and makes it draggable
-      if (((i + 1) % 3 === 0)) {
-        sidebar.appendChild(document.createElement('br'))
-      }
-    }
+    // for (var i = 0; i < paths.length; i++) {
+    //   AddSidebarComponent(paths[i]) // Adds the component to the sidebar and makes it draggable
+    //   if (((i + 1) % 3 === 0)) {
+    //     sidebar.appendChild(document.createElement('br'))
+    //   }
+    // }
 
     function updateStyle (state, hover) {
       if (hover) {

@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react'
+/* eslint-disable camelcase */
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   Hidden,
   List,
   ListItem,
   Collapse,
-  ListItemIcon
+  ListItemIcon,
+  ListItemText,
+  Tooltip
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import ExpandLess from '@material-ui/icons/ExpandLess'
@@ -69,6 +73,9 @@ export default function ComponentSidebar ({ compRef }) {
     }, [])
   }
 
+  const [compName, setcompName] = useState('Select Component')
+  const [compSelect, setcompSelect] = useState(<div style={{ height: '74px' }} />)
+
   return (
     <>
       <Hidden smDown>
@@ -81,50 +88,77 @@ export default function ComponentSidebar ({ compRef }) {
           <h2 style={{ margin: '5px' }}>Components List</h2>
         </ListItem>
 
-        {/* Collapsing List Mapped by Libraries fetched by the API */}
-        {
-          libraries.map(
-            (library) => {
-              return (
-                <div key={library.id}>
-                  <ListItem onClick={(e, id = library.id) => handleCollapse(id)} button divider>
-                    <span className={classes.head}>{library.library_name}</span>
-                    {collapse[library.id] ? <ExpandLess /> : <ExpandMore />}
-                  </ListItem>
-                  <Collapse in={collapse[library.id]} timeout={'auto'} unmountOnExit mountOnEnter exit={false}>
-                    <List component="div" disablePadding dense >
+        <div style={{ maxHeight: '39vh', overflowY: 'auto', overflowX: 'hidden' }}>
+          {/* Collapsing List Mapped by Libraries fetched by the API */}
+          {
+            libraries.map(
+              (library) => {
+                return (
+                  <div key={library.id}>
+                    <ListItem onClick={(e, id = library.id) => handleCollapse(id)} button divider>
+                      <span className={classes.head}>{library.library_name}</span>
+                      {collapse[library.id] ? <ExpandLess /> : <ExpandMore />}
+                    </ListItem>
+                    <Collapse in={collapse[library.id]} timeout={'auto'} unmountOnExit mountOnEnter exit={false}>
+                      <List component="div" disablePadding dense >
 
-                      {/* Chunked Components of Library */}
-                      {
-                        chunk(components[library.id], COMPONENTS_PER_ROW).map((componentChunk) => {
-                          return (
-                            <ListItem key={componentChunk[0].svg_path} divider>
-                              {
-                                componentChunk.map((component) => {
-                                  // console.log(component)
-                                  return (<ListItemIcon key={component.full_name}>
-                                    <SideComp component={component} />
-                                  </ListItemIcon>)
+                        {/* Chunked Components of Library */}
+                        {
+                          chunk(components[library.id], COMPONENTS_PER_ROW).map((componentChunk) => {
+                            return (
+                              <ListItem key={componentChunk[0].svg_path} divider>
+                                {
+                                  componentChunk.map((component) => {
+                                    // console.log(component)
+                                    return (<ListItemIcon key={component.full_name}>
+                                      <Tooltip title={component.name} arrow>
+                                        <img src={'../' + component.thumbnail_path} height='72px' width='72px' onClick={() => {
+                                          setcompName(component.name)
+                                          if (component.alternate_component.length === 0) {
+                                            setcompSelect(<SideComp component={component} />)
+                                          } else {
+                                            setcompSelect(
+                                              <>
+                                                <SideComp component={component} />
+                                                <ListItemText primary='More Parts available' />
+                                              </>
+                                            )
+                                          }
+                                        }} />
+                                      </Tooltip>
+                                    </ListItemIcon>)
+                                  }
+                                  )
                                 }
-                                )
-                              }
-                            </ListItem>
-                          )
-                        })
-                      }
+                              </ListItem>
+                            )
+                          })
+                        }
 
-                    </List>
-                  </Collapse>
-                </div>
-              )
-            }
-          )
-        }
+                      </List>
+                    </Collapse>
+                  </div>
+                )
+              }
+            )
+          }
+        </div>
 
-        <ListItem>
+        <div style={{ minHeight: '30vh', overflowY: 'auto', overflowX: 'hidden' }} >
+          <ListItem>
+            <ListItemText primary={compName} />
+          </ListItem>
+          <ListItem>
+            <ListItemIcon>
+              {compSelect}
+            </ListItemIcon>
+          </ListItem>
+        </div>
+
+        {/* <ListItem>
           <div ref={compRef}>
           </div>
-        </ListItem>
+        </ListItem> */}
       </List>
     </>
   )
