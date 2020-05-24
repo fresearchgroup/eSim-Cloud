@@ -112,7 +112,7 @@ export default function ComponentSidebar ({ compRef }) {
                                     // console.log(component)
                                     return (<ListItemIcon key={component.full_name}>
                                       <Tooltip title={component.name} arrow>
-                                        <img src={'../' + component.thumbnail_path} height='72px' width='72px' onClick={() => {
+                                        <img src={'../' + component.thumbnail_path} height='72px' width='72px' alt="Logo" onClick={() => {
                                           setcompName(component.name)
                                           if (component.alternate_component.length === 0) {
                                             setcompSelect(<SideComp component={component} />)
