@@ -88,7 +88,7 @@ export default function ComponentSidebar ({ compRef }) {
           <h2 style={{ margin: '5px' }}>Components List</h2>
         </ListItem>
 
-        <div style={{ maxHeight: '39vh', overflowY: 'auto', overflowX: 'hidden' }}>
+        <div style={{ maxHeight: '90vh', overflowY: 'auto', overflowX: 'hidden' }}>
           {/* Collapsing List Mapped by Libraries fetched by the API */}
           {
             libraries.map(
@@ -164,7 +164,7 @@ export default function ComponentSidebar ({ compRef }) {
           }
         </div>
 
-        <div style={{ minHeight: '30vh', overflowY: 'auto', overflowX: 'hidden' }} >
+        <div style={{ minHeight: '10vh', overflowY: 'auto', overflowX: 'hidden' }} >
           <ListItem>
             <ListItemText primary={compName} />
           </ListItem>
@@ -174,11 +174,6 @@ export default function ComponentSidebar ({ compRef }) {
             </ListItemIcon>
           </ListItem>
         </div>
-
-        {/* <ListItem>
-          <div ref={compRef}>
-          </div>
-        </ListItem> */}
       </List>
     </>
   )
