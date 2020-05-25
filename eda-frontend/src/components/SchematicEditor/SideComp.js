@@ -78,7 +78,7 @@ export default function SideComp ({ component }) {
           </ListItemText>
 
           <ListItemText>
-            <b>DMG:</b> {component.dmg}  <b> Part: </b> {component.part}
+            <b>DMG:</b> {component.dmg ? component.dmg : 1}  <b> Part: </b> {component.part ? component.part : 'A'}
           </ListItemText>
         </List>
       </Popover>
