@@ -120,7 +120,27 @@ export default function ComponentSidebar ({ compRef }) {
                                             setcompSelect(
                                               <>
                                                 <SideComp component={component} />
-                                                <ListItemText primary='More Parts available' />
+                                                {
+                                                  chunk(component.alternate_component, COMPONENTS_PER_ROW).map((componentChunk) => {
+                                                    return (
+                                                      <ListItem key={componentChunk[0].svg_path}>
+                                                        {
+                                                          componentChunk.map(
+                                                            (alternateComponent) => {
+                                                              alternateComponent.keyword = component.keyword
+                                                              alternateComponent.name = component.name
+                                                              alternateComponent.data_link = component.data_link
+                                                              alternateComponent.description = component.description
+                                                              return (
+                                                                <SideComp component={alternateComponent} key={alternateComponent.full_name}/>
+                                                              )
+                                                            }
+                                                          )
+                                                        }
+                                                      </ListItem>
+                                                    )
+                                                  })
+                                                }
                                               </>
                                             )
                                           }
