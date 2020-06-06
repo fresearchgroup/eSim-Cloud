@@ -12,7 +12,7 @@ import NetlistInfoFunct from './NetlistInfo.js'
 import ToolbarTools from './ToolbarTools.js'
 import KeyboardShorcuts from './KeyboardShorcuts.js'
 import { SideBar } from './SideBar.js'
-
+import LoadWire from './WireConfig.js'
 var graph
 
 const {
@@ -73,26 +73,35 @@ export default function LoadGrid (container, sidebar, outline) {
     mxCell.prototype.properties = {}
     mxCell.prototype.sourceVertex = false
     mxCell.prototype.targetVertex = false
+    mxCell.prototype.tarx = 0
+    mxCell.prototype.tary = 0
     // mxCell.prototype.ConnectedNode = null
-
+    // location = self['location']
     // Enables guides
     mxGraphHandler.prototype.guidesEnabled = true
     mxEdgeHandler.prototype.snapToTerminals = true
-
+    // console.log('grid loaded')
     // Enable cell Rotation
     // mxVertexHandler.prototype.rotationEnabled = true
-
+    // window.location.reload()
     // Creates the graph inside the given container
     graph = new mxGraph(container)
-   
-
+    // LoadWire(graph,container)
+    // window.location.reload()
     mxConnectionHandler.prototype.movePreviewAway = false
     mxConnectionHandler.prototype.waypointsEnabled = true
     mxGraph.prototype.resetEdgesOnConnect = false
     mxConstants.SHADOWCOLOR = '#C0C0C0'
     var joinNodeSize = 7
     var strokeWidth = 2
-
+    //location.reload()
+    window.localStorage.setItem('refresh', "0");
+    var refresh = window.localStorage.getItem('refresh');
+    console.log(refresh);
+    if (refresh===0){
+    window.location.reload();
+    window.localStorage.setItem('refresh', "1");
+    }
     // Replaces the port image
     mxConstraintHandler.prototype.pointImage = new mxImage(dot, 10, 10)
 
@@ -105,6 +114,10 @@ export default function LoadGrid (container, sidebar, outline) {
     // To show the images in the outline, uncomment the following code
     outln.outline.labelsVisible = true
     outln.outline.setHtmlLabels(true)
+    /* graph.addListener(mxEvent.SINGLE_CLICK, function(sender, evt) {
+      var cell = evt.getProperty('cell')
+      alert('cell selected')
+    }) */
 
     graph.addListener(mxEvent.DOUBLE_CLICK, function (sender, evt) {
       var cell = evt.getProperty('cell')
@@ -351,7 +364,7 @@ export default function LoadGrid (container, sidebar, outline) {
     }) */
 
     mxEvent.disableContextMenu(container)
-  };
+
 
   // Computes the position of edge to edge connection points.
   mxGraphView.prototype.updateFixedTerminalPoint = function (edge, terminal, source, constraint) {
@@ -437,11 +450,15 @@ export default function LoadGrid (container, sidebar, outline) {
     return me.getState() != null || mxEvent.isRightMouseButton(me.getEvent())
   }
 
-  // Updates target terminal point for edge-to-edge connections.
-  var mxConnectionHandlerUpdateCurrentState = mxConnectionHandler.prototype.updateCurrentState
-  mxConnectionHandler.prototype.updateCurrentState = function (me) {
+ try { // Updates target terminal point for edge-to-edge connections.
+ var mxConnectionHandlerUpdateCurrentState = mxConnectionHandler.prototype.updateCurrentState
+ mxConnectionHandler.prototype.updateCurrentState = function (me) {
+   try{
     mxConnectionHandlerUpdateCurrentState.apply(this, arguments)
-
+   }
+   catch(e){
+     // console.log(e)
+   }
     if (this.edgeState != null) {
       this.edgeState.cell.geometry.setTerminalPoint(null, false)
 
@@ -455,6 +472,10 @@ export default function LoadGrid (container, sidebar, outline) {
       }
     }
   }
+ }
+catch(err) {
+  console.log(err)
+}
 
   // Updates the terminal and control points in the cloned preview.
   mxEdgeSegmentHandler.prototype.clonePreviewState = function (point, terminal) {
@@ -723,4 +744,4 @@ export default function LoadGrid (container, sidebar, outline) {
 
     return mxGraphCreateHandler.apply(this, arguments)
   }
-}
+}}
